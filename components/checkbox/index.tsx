@@ -20,6 +20,7 @@ type Props = {
 export const Checkbox: FC<Props> = (props: Props): ReactElement => {
   const { checked, onChange, indeterminate, name, children, disabled, className, isError } = props;
   const inputRef = useRef<HTMLInputElement>(null);
+  const id = useRef(`checkbox-${Math.random().toString(36).substr(2, 9)}`);
 
   useEffect(() => {
     const el = inputRef.current;
@@ -29,16 +30,20 @@ export const Checkbox: FC<Props> = (props: Props): ReactElement => {
   }, [indeterminate, checked]);
 
   return (
-    <label className={clsx('relative flex cursor-pointer items-center', className)}>
+    <label
+      htmlFor={id.current}
+      className={clsx('relative flex cursor-pointer items-center', className)}>
       <div className="relative flex h-8 w-8 flex-none items-center justify-center">
         <input
           ref={inputRef}
+          id={id.current}
           className="peer absolute inset-0 z-20 cursor-pointer opacity-0"
           name={name}
           type="checkbox"
           checked={checked}
           onChange={onChange}
           disabled={disabled}
+          aria-invalid={isError && !checked}
         />
         <span
           className={clsx(

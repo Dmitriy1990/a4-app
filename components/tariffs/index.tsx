@@ -40,31 +40,49 @@ export const Tariffs = () => {
     }
   };
 
+  const handleTariffKeyDown = (e: React.KeyboardEvent, id: string) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      setSelectTariffId(id);
+    }
+  };
+
   return (
-    <div className="max-w-319 mx-auto px-4 sm:px-7.5 py-[20px] sm:py-[43px] pb-[22px] sm375:pb[24px]">
-      <h2 className="text-[22px] leading-[110%] sm375:text-[24px] sm:text-[40px] font-bold sm:mb-[101px] mb-[24px] sm375:mb-[20px]">
+    <section
+      aria-labelledby="tariffs-title"
+      className="max-w-319 mx-auto px-4 sm:px-7.5 py-[20px] sm:py-[43px] pb-[22px] sm375:pb[24px]">
+      <h2
+        id="tariffs-title"
+        className="text-[22px] leading-[110%] sm375:text-[24px] sm:text-[40px] font-bold sm:mb-[101px] mb-[24px] sm375:mb-[20px]">
         Выбери подходящий для себя <span className="text-orange">тариф</span>
       </h2>
       <div className="flex items-center flex-col xl:flex-row xl:gap-[87px] sm:mb-[67px] mb-[22px] sm375:mb[24px]">
         <Image
           src={imgMan}
           className="max-w-[99px] sm375:max-w-[124px] md:max-w-[380px] h-auto"
-          alt="Man"
+          alt="Иллюстрация человека"
           loading="eager"
         />
         <div className="flex flex-col items-center xl:items-start">
-          <div className="max-w-[748px]  w-full mb-5 min-h-[300px] flex flex-col">
+          <div
+            className="max-w-[748px]  w-full mb-5 min-h-[300px] flex flex-col"
+            role="radiogroup"
+            aria-labelledby="tariffs-title">
             {isLoading ? (
-              <div className="flex-1 flex items-center justify-center">
+              <div className="flex-1 flex items-center justify-center" aria-live="polite">
                 <Spinner size="lg" />
               </div>
             ) : (
               <>
                 {bestTariff && (
                   <div
+                    role="radio"
+                    aria-checked={selectedId === bestTariff.id + bestTariff.text}
+                    tabIndex={0}
+                    onKeyDown={(e) => handleTariffKeyDown(e, bestTariff.id + bestTariff.text)}
                     onClick={() => setSelectTariffId(bestTariff.id + bestTariff.text)}
                     className={clsx(
-                      'mb-[6px] sm375:mb-[8px] sm:mb-[14px] bg-grey-600 rounded-[20px] sm:rounded-4xl border-[2px] px-[20px] py-[18px] sm:py-2.5 sm:px-5 relative cursor-pointer overflow-hidden transition-all duration-500',
+                      'mb-[6px] sm375:mb-[8px] sm:mb-[14px] bg-grey-600 rounded-[20px] sm:rounded-4xl border-[2px] px-[20px] py-[18px] sm:py-2.5 sm:px-5 relative cursor-pointer overflow-hidden transition-all duration-500 outline-none focus-visible:ring-2 focus-visible:ring-orange',
                       selectedId === bestTariff.id + bestTariff.text
                         ? 'border-orange'
                         : 'border-olive',
@@ -94,7 +112,9 @@ export const Tariffs = () => {
                             !isDiscountActive && 'opacity-0',
                           )}>
                           {formatPrice(bestTariff.full_price)} ₽
-                          <span className="absolute top-[50%] left-0 z-10 h-[2px] w-full bg-stone"></span>
+                          <span
+                            className="absolute top-[50%] left-0 z-10 h-[2px] w-full bg-stone"
+                            aria-hidden="true"></span>
                         </span>
                       </div>
                       <p className="max-w-[328px] sm:mt-0 mt-[30px] w-full text-[14px] sm:text-[16px] leading-[130%]">
@@ -107,9 +127,13 @@ export const Tariffs = () => {
                   {otherTariffs.reverse().map((tariff) => (
                     <div
                       key={tariff.id}
+                      role="radio"
+                      aria-checked={selectTariffId === tariff.id}
+                      tabIndex={0}
+                      onKeyDown={(e) => handleTariffKeyDown(e, tariff.id)}
                       onClick={() => setSelectTariffId(tariff.id)}
                       className={clsx(
-                        'flex-1 flex flex-row sm:flex-col gap-[30px] sm:gap-0  bg-grey-600 border-[2px] rounded-[20px] sm:rounded-[40px] px-[20px] py-[18px] sm:py-[23px] sm:px-[18px] relative cursor-pointer flex flex-col items-center overflow-hidden transition-all duration-500',
+                        'flex-1 flex flex-row sm:flex-col gap-[30px] sm:gap-0  bg-grey-600 border-[2px] rounded-[20px] sm:rounded-[40px] px-[20px] py-[18px] sm:py-[23px] sm:px-[18px] relative cursor-pointer flex flex-col items-center overflow-hidden transition-all duration-500 outline-none focus-visible:ring-2 focus-visible:ring-orange',
                         selectTariffId === tariff.id ? 'border-orange' : 'border-olive',
                       )}>
                       <span
@@ -133,7 +157,9 @@ export const Tariffs = () => {
                             !isDiscountActive && 'opacity-0',
                           )}>
                           {formatPrice(tariff.full_price)} ₽
-                          <span className="absolute top-[50%] left-0 z-10 h-[2px] w-full bg-stone"></span>
+                          <span
+                            className="absolute top-[50%] left-0 z-10 h-[2px] w-full bg-stone"
+                            aria-hidden="true"></span>
                         </span>
                       </div>
                       <p className="text-[14px] sm:text-[16px] leading-[130%] mb-[5px] sm:mt-0 mt-[20px]">
@@ -145,7 +171,9 @@ export const Tariffs = () => {
               </>
             )}
           </div>
-          <div className="flex bg-grey-600 gap-[8px] max-w-[499px] rounded-[20px] px-[12px] py-[14px] sm:px-5 sm:py-[18px] bg-amber mb-[30px]">
+          <div
+            className="flex bg-grey-600 gap-[8px] max-w-[499px] rounded-[20px] px-[12px] py-[14px] sm:px-5 sm:py-[18px] bg-amber mb-[30px]"
+            role="alert">
             <div className="w-[24px]">
               <IconAlert />
             </div>
@@ -196,6 +224,6 @@ export const Tariffs = () => {
           если ты не получишь видимых результатов.
         </p>
       </div>
-    </div>
+    </section>
   );
 };
