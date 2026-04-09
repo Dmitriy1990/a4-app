@@ -1,4 +1,5 @@
 import { IconAlert, imgMan } from '@/assets';
+import Image from 'next/image';
 import React, { useState } from 'react';
 import { Checkbox } from '../checkbox';
 import { Button } from '../button';
@@ -45,10 +46,11 @@ export const Tariffs = () => {
         Выбери подходящий для себя <span className="text-orange">тариф</span>
       </h2>
       <div className="flex items-center flex-col xl:flex-row xl:gap-[87px] sm:mb-[67px] mb-[22px] sm375:mb[24px]">
-        <img
-          src={imgMan.src}
-          className="max-w-[99px] sm375:max-w-[124px] md:max-w-[380px]"
-          alt=""
+        <Image
+          src={imgMan}
+          className="max-w-[99px] sm375:max-w-[124px] md:max-w-[380px] h-auto"
+          alt="Man"
+          loading="eager"
         />
         <div className="flex flex-col items-center xl:items-start">
           <div className="max-w-[748px]  w-full mb-5 min-h-[300px] flex flex-col">
