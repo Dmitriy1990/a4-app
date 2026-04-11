@@ -1,7 +1,7 @@
 import { IconCheck } from '@/assets';
 import clsx from 'clsx';
 import type { ChangeEvent, FC, ReactElement, ReactNode } from 'react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useId, useRef } from 'react';
 
 type Props = {
   checked?: boolean;
@@ -20,7 +20,7 @@ type Props = {
 export const Checkbox: FC<Props> = (props: Props): ReactElement => {
   const { checked, onChange, indeterminate, name, children, disabled, className, isError } = props;
   const inputRef = useRef<HTMLInputElement>(null);
-  const id = useRef(`checkbox-${Math.random().toString(36).substr(2, 9)}`);
+  const id = useId();
 
   useEffect(() => {
     const el = inputRef.current;
@@ -30,13 +30,11 @@ export const Checkbox: FC<Props> = (props: Props): ReactElement => {
   }, [indeterminate, checked]);
 
   return (
-    <label
-      htmlFor={id.current}
-      className={clsx('relative flex cursor-pointer items-center', className)}>
+    <label htmlFor={id} className={clsx('relative flex cursor-pointer items-center', className)}>
       <div className="relative flex h-8 w-8 flex-none items-center justify-center">
         <input
           ref={inputRef}
-          id={id.current}
+          id={id}
           className="peer absolute inset-0 z-20 cursor-pointer opacity-0"
           name={name}
           type="checkbox"

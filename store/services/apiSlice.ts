@@ -11,7 +11,7 @@ export interface Tariff {
 
 export const apiSlice = createApi({
   reducerPath: 'api',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://t-core.fit-hub.pro/Test' }),
+  baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL }),
   endpoints: (builder) => ({
     getTariffs: builder.query<Tariff[], void>({
       query: () => '/GetTariffs',
@@ -20,8 +20,7 @@ export const apiSlice = createApi({
           try {
             const parsed = JSON.parse(response);
             return Array.isArray(parsed) ? (parsed as Tariff[]) : [];
-          } catch (e) {
-            console.error('Failed to parse tariffs string:', e);
+          } catch {
             return [];
           }
         }

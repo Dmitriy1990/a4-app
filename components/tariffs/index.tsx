@@ -12,7 +12,7 @@ import clsx from 'clsx';
 import { formatPrice } from '@/utils/format';
 
 export const Tariffs = () => {
-  const { data: tariffs = [], isLoading } = useGetTariffsQuery();
+  const { data: tariffs = [], isLoading, isError, refetch } = useGetTariffsQuery();
   const isDiscountActive = useSelector((state: RootState) => state.timer.isDiscountActive);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -29,7 +29,7 @@ export const Tariffs = () => {
       setHasError(true);
     } else {
       setHasError(false);
-      console.log('Покупка тарифа...');
+      // Logic for purchase would go here in production
     }
   };
 
@@ -50,13 +50,13 @@ export const Tariffs = () => {
   return (
     <section
       aria-labelledby="tariffs-title"
-      className="max-w-319 mx-auto px-4 sm:px-7.5 py-[20px] sm:py-[43px] pb-[22px] sm375:pb[24px]">
+      className="max-w-319 mx-auto px-4 sm:px-7.5 py-[20px] sm:py-[43px] pb-[22px] sm375:pb-[24px]">
       <h2
         id="tariffs-title"
         className="text-[22px] leading-[110%] sm375:text-[24px] sm:text-[40px] font-bold sm:mb-[101px] mb-[24px] sm375:mb-[20px]">
         Выбери подходящий для себя <span className="text-orange">тариф</span>
       </h2>
-      <div className="flex items-center flex-col xl:flex-row xl:gap-[87px] sm:mb-[67px] mb-[22px] sm375:mb[24px]">
+      <div className="flex items-center flex-col xl:flex-row xl:gap-[87px] sm:mb-[67px] mb-[22px] sm375:mb-[24px]">
         <Image
           src={imgMan}
           className="max-w-[99px] sm375:max-w-[124px] md:max-w-[380px] h-auto"
@@ -71,6 +71,13 @@ export const Tariffs = () => {
             {isLoading ? (
               <div className="flex-1 flex items-center justify-center" aria-live="polite">
                 <Spinner size="lg" />
+              </div>
+            ) : isError ? (
+              <div className="flex-1 flex flex-col items-center justify-center text-center p-6 bg-grey-600 rounded-[20px] border border-tomato">
+                <p className="text-tomato font-medium mb-4">Не удалось загрузить тарифы</p>
+                <Button onClick={() => refetch()} className="max-w-[200px]">
+                  Попробовать снова
+                </Button>
               </div>
             ) : (
               <>

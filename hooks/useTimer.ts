@@ -36,8 +36,11 @@ export function useTimer(options?: UseTimerOptions) {
 
   useEffect(() => {
     if (countdown && seconds <= 0 && running) {
-      setRunning(false);
-      if (onComplete) onComplete();
+      const timeoutId = setTimeout(() => {
+        setRunning(false);
+        if (onComplete) onComplete();
+      }, 0);
+      return () => clearTimeout(timeoutId);
     }
   }, [seconds, countdown, running, onComplete]);
 
